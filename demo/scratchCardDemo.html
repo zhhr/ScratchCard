@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>ScratchCardDemo</title>
+
+	<style>
+		html{
+			background: #f5f5f5;
+		}
+		.box{
+			width: 100%;
+			height: 200px;
+			border: 1px solid ;
+			position: relative;
+			background: #c8c8c8;
+		}
+		#canvas{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		.boxin{
+			font: 100px/200px sans-serif ;
+			text-align: center;
+			color: #fff;
+		}
+		button{
+			border: 1px solid #000;
+		}
+
+	</style>
+</head>
+<body>
+	<h3>刮刮卡demo</h3>
+	<p>注意：由于canvas安全限制，该demo不可以file://协议打开，需用http://或者https://协议打开，否则会导致功能异常。</p>
+	<div class="box">
+		<div class="boxin"></div>
+		<canvas id="canvas" width="600" height="200"></canvas>
+	</div>
+
+	<div style="padding: 20px;">
+		<button id="pauseBtn">暂停</button>
+		<button id="continueBtn">恢复</button>
+		<button id="resetBtn">重置</button>
+	</div>
+
+
+	<script src="scratchCard.js"></script>
+	<script>
+
+
+		var scratchCard = new ScratchCard({
+			id : '#canvas'  ,//canvas query string
+//			maskColor : '#ccc' ,//背景色（如果遮罩图片是jpg可以不写）
+			maskImage   : './img/bg.jpg',   // 遮罩图片路径（推荐使用jpg，防止出现透明部分）(如果只需要纯色，可以只设置maskColor)
+			maskBack : function(){
+
+			    console.log('去取数据。。。');
+			    document.querySelector('.boxin').innerHTML = '谢谢';
+
+				var _this = scratchCard;
+
+				// 画线
+                _this.paintLine(0,0,_this.canvasWidth/2,_this.canvasHeight/2,'red',1,null,1);
+                _this.paintLine(_this.canvasWidth/2,_this.canvasHeight/2,_this.canvasWidth,0,'red',1,null,1);
+
+                // 画文字
+                _this.paintText({
+                    font : 'bold 100px Hanzipen SC',
+                    textAlign : 'center',
+                    textBaseline : 'middle',
+                    text : '刮一刮',
+                    fillStyle : '#ff79ed',
+					x : _this.canvasWidth/2/_this.dpi,
+					y : _this.canvasHeight/2/_this.dpi,
+				});
+
+                // 画图片：注意：画图片是异步操作
+                _this.paintImage('./img/star.png',30,30,24,24,function(){
+                    console.log('draw one star')
+                    _this.paintImage('./img/star.png',90,60,24,24,function(){console.log('draw two star')});
+				},Math.PI);
+
+
+            },    //画完遮罩后，可以执行其他内容，如：从后台取数据、在遮罩上画其他内容
+			openPercent : 0.6,  // 刮开多少后全部显示 范围：0< x < 1
+			endBack : function(){
+                console.log('刮奖完成。。。')
+            }, //完全刮开后的回调
+			endHide : true,	//画完后 canvas 是否会 display:none; 默认true
+
+		});
+
+
+
+		var pauseBtn = document.getElementById('pauseBtn');
+		var continueBtn = document.getElementById('continueBtn');
+		var resetBtn = document.getElementById('resetBtn');
+
+
+		pauseBtn.onclick = function(ev){
+            scratchCard.pause();
+		};
+		continueBtn.onclick = function(ev){
+			scratchCard.continue();
+		};
+		resetBtn.onclick = function(ev){
+			scratchCard.reset();
+		};
+
+
+
+	</script>
+
+</body>
+</html>
