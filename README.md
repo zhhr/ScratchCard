@@ -18,7 +18,7 @@ canvas#canvas作为刮奖遮罩，需要定位覆盖到 div.box上面。
     <canvas id="canvas" width="600" height="200"></canvas>
 </div>
 ```
-####css部分
+#### css部分
 ```
 .box{ position: relative; width: 600px; height: 200px; border: 1px solid ;}
 #canvas{ position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
