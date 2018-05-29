@@ -8,7 +8,8 @@
         this.maskColor = conf.maskColor;
         this.maskImage = conf.maskImage;
         this.maskBack = conf.maskBack;
-        this.openPercent = conf.openPercent
+        this.openPercent = conf.openPercent;
+        this.progressBack = conf.progressBack;
         this.endBack = conf.endBack;
         this.endHide = conf.endHide;
         this.dpi = conf.dpi || window.devicePixelRatio || 1;
@@ -54,7 +55,11 @@
     };
     ScratchCard.prototype.ifShowAll = function(){
         this.openPercent = this.openPercent || 0.6;
-        if( this.getPercent() > this.openPercent ){
+        var progress = this.getPercent();
+        if(this.progressBack instanceof Function){
+            this.progressBack(progress);
+        }
+        if( progress > this.openPercent ){
             this.paint.clearRect(0,0,this.canvas.width,this.canvas.height);
             this.removeEvent();
             if(this.endHide){

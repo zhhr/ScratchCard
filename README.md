@@ -43,14 +43,18 @@ var scratchCard = new ScratchCard({
            
         openPercent : 0.6,  //刮开多少后全部显示 范围：0< x < 1，默认0.6
         
+        //每次刮动后的回调
+        progressBack : function(progress){
+            console.log('刮开进度：',progress);
+        },
         //完全刮开后的回调
         endBack : function(){
-               console.log('刮奖完成。。。')
+           console.log('刮奖完成。。。')
         }, 
            
-        endHide : true,	//画完后 canvas 是否会 display:none; 默认true
+        //endHide : true,   //画完后 canvas 是否会 display:none; 默认true
 
-        dpi : 1,    //设备dpi，默认会自动根据设备取出，会决定canvas真实大小(高清倍率)，也可强制设置。如果要在canvas上操作，坐标应该乘上dpi。
+        //dpi : 1,    //设备dpi，默认会自动根据设备取出，会决定canvas真实大小(高清倍率)，也可强制设置。如果要在canvas上操作，坐标应该乘上dpi。
 
 }) ;
 ```
