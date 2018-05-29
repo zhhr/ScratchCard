@@ -3,7 +3,7 @@
 A scratch card plug-in for HTML5 that can be used on PC or mobile.
 一个可以用于PC端和移动端的HTML5刮刮卡插件。
 
-###刮刮卡插件使用说明
+### 刮刮卡插件使用说明
 
 本插件不做UI,需要自己实现html、css部分，当然这部分极其简单。
 本插件基于canvas实现，你需要自己定义canvas的css相关属性 position、width、height
@@ -11,7 +11,7 @@ A scratch card plug-in for HTML5 that can be used on PC or mobile.
 div.box 作为父元素，奖品内容可以写在里面。
 canvas#canvas作为刮奖遮罩，需要定位覆盖到 div.box上面。
 
-####html部分
+#### html部分
 ```
 <div class="box">
     <div class="boxin"></div>
@@ -25,7 +25,7 @@ canvas#canvas作为刮奖遮罩，需要定位覆盖到 div.box上面。
 ```
 
 
-####调用方法
+#### 调用方法
 ```
 var scratchCard = new ScratchCard({
 
@@ -59,7 +59,7 @@ var scratchCard = new ScratchCard({
 }) ;
 ```
 
-####实例可用属性 
+#### 实例可用属性 
 ```
 canvas :  canvas dom对象
 paint :  画笔对象（ctx)
@@ -67,13 +67,13 @@ canvasWidth :  canvas修改后的 width 属性值，等于 canvas.width
 canvasHeight :  canvas修改后的 height 属性值，等于 canvas.height
 dpi :  设备dpi（高清倍率）
 ```
-####可用api
+#### 可用api
 ```
 reset : 完全重置刮刮卡
 pause : 暂停使用刮刮卡，调用后无法擦除
 continue : 恢复使用刮刮卡，调用后可用继续擦除
 ```
-####封装的canvas功能,都需要用 ScratchCard实例为this来调用
+#### 封装的canvas功能,都需要用 ScratchCard实例为this来调用
 ```
 paintImage (src,x,y,w,h,callback,dpi)
     //画一张图片。 注意：这是一个异步操作
