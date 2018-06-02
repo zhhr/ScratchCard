@@ -29,8 +29,9 @@
         }
         this.paint = this.canvas.getContext('2d');
         this.canvas.style.display = 'block';
-        this.canvasWidth = this.canvas.width = this.dpi * parseInt(this.getStyle(this.canvas,'width'));
-        this.canvasHeight = this.canvas.height = this.dpi * parseInt(this.getStyle(this.canvas,'height'));
+        this.scaleX = this.dpi;
+        this.scaleY = this.dpi;
+        this.initCanvasWH();
         if(this.maskColor){
             this.drawMaskColor(this.maskColor);
         }
@@ -42,6 +43,7 @@
             }
         }
         this.addEvent();
+        this.windowResize();
         return this.paint;
     };
     ScratchCard.prototype.reset = function (){
@@ -53,9 +55,29 @@
     ScratchCard.prototype.continue = function (){
         this.addEvent();
     };
+    ScratchCard.prototype.initCanvasWH = function(){
+        this.canvasWidth = this.canvas.width = this.dpi * parseInt(this.getStyle(this.canvas,'width'));
+        this.canvasHeight = this.canvas.height = this.dpi * parseInt(this.getStyle(this.canvas,'height'));
+    };
+    ScratchCard.prototype.fixScale = function(){
+        clearTimeout(this.changeTimeout);
+        this.changeTimeout = setTimeout(()=>{
+            let width = parseInt(this.getStyle(this.canvas,'width'));
+            let height = parseInt(this.getStyle(this.canvas,'height'));
+            this.scaleX = this.canvas.width / width;
+            this.scaleY = this.canvas.height / height;
+        },100);
+    };
+    ScratchCard.prototype.windowResize = function(){
+        let resizeEvt = 'orient' +
+        'ationchange' in window ? 'orientationchange' : 'resize';
+        if (!document.addEventListener) return;
+        window.addEventListener(resizeEvt, this.fixScale.bind(this), false);
+        document.addEventListener('DOMContentLoaded', this.fixScale.bind(this), false);
+    };
     ScratchCard.prototype.ifShowAll = function(){
         this.openPercent = this.openPercent || 0.6;
-        var progress = this.getPercent();
+        let progress = this.getPercent();
         if(this.progressBack instanceof Function){
             this.progressBack(progress);
         }
@@ -71,24 +93,24 @@
         }
     };
     ScratchCard.prototype.getPercent = function (){
-        var imgData = this.paint.getImageData(0,0,this.canvas.width,this.canvas.height);    //获取所有数据点
-        var data = imgData.data;
-        var total = data.length / 4 ;
-        var count = 0;
-        for(var i=3; i<data.length; i+=4){
+        let imgData = this.paint.getImageData(0,0,this.canvas.width,this.canvas.height);    //获取所有数据点
+        let data = imgData.data;
+        let total = data.length / 4 ;
+        let count = 0;
+        for(let i=3; i<data.length; i+=4){
             if(data[i] === 0){
                 count++;
             }
         }
-        var percent = 100 * count / total ;
+        let percent = 100 * count / total ;
         percent /= 100;
         return percent;
     };
     ScratchCard.prototype.removeEvent = function (){};
     ScratchCard.prototype.addEvent = function(){
         this.removeEvent();
-        var _this = this;
-        var reg = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini|ucweb)/i;
+        let _this = this;
+        let reg = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini|ucweb)/i;
         if(reg.test(navigator.userAgent)) {
             addEventTouch();
         } else {
@@ -142,21 +164,21 @@
     ScratchCard.prototype.touchClear = function (ev){
         ev.preventDefault();
         ev.stopPropagation();
-        var bcr = this.canvas.getBoundingClientRect();
-        var l1 = bcr.left;
-        var t1 = bcr.top;
-        var touch = ev.touches[0];
-        var l2 = touch.clientX;
-        var t2 = touch.clientY;
-        var x = (l2 - l1) * this.dpi;
-        var y = (t2 - t1) * this.dpi;
-        var r = touch.radiusX * this.dpi;
+        let bcr = this.canvas.getBoundingClientRect();
+        let l1 = bcr.left;
+        let t1 = bcr.top;
+        let touch = ev.touches[0];
+        let l2 = touch.clientX;
+        let t2 = touch.clientY;
+        let x = (l2 - l1) * this.scaleX;
+        let y = (t2 - t1) * this.scaleY;
+        let r = touch.radiusX * this.scaleX;
         this.clearArc(this.paint,x,y,r);
     };
     ScratchCard.prototype.mouseClear = function (ev){
         ev.preventDefault();
         ev.stopPropagation();
-        this.clearArc(this.paint,ev.offsetX * this.dpi,ev.offsetY * this.dpi,20);
+        this.clearArc(this.paint,ev.offsetX * this.scaleX,ev.offsetY * this.scaleY,20);
     };
     ScratchCard.prototype.drawMaskColor = function(color){
         color = color || '#ffffff';
@@ -171,7 +193,7 @@
         }
     };
     ScratchCard.prototype.drawImage = function(paint,src,x,y,w,h,callback){
-        var img = document.createElement('img');
+        let img = document.createElement('img');
         img.src = src;
         img.onload = function(){
             paint.drawImage(img,x,y,w,h);
@@ -229,10 +251,10 @@
         this.saveOldPoint(x,y,r);
     };
     ScratchCard.prototype.pointCut = function (paint,xa,ya,xb,yb,r){
-        var diffY = (yb - ya);
-        var diffX = (xb - xa);
-        var diffL = Math.sqrt(diffY * diffY + diffX * diffX);
-        var angle;
+        let diffY = (yb - ya);
+        let diffX = (xb - xa);
+        let diffL = Math.sqrt(diffY * diffY + diffX * diffX);
+        let angle;
         if(xb < xa){
             angle = Math.atan(diffY/diffX) - Math.PI
         }else if(xb > xa){
@@ -282,16 +304,16 @@
             this.drawText(this.paint,conf);
         }
         function fontFix(txt,dpi){
-            var reg = /\b\d+px\b/g;
+            let reg = /\b\d+px\b/g;
             dpi = dpi || 1;
-            var a = txt.match(reg);
-            var b = txt.split(reg);
+            let a = txt.match(reg);
+            let b = txt.split(reg);
             if(a){
-                var t = '';
-                for(var i=0;i<a.length;i++){
+                let t = '';
+                for(let i=0;i<a.length;i++){
                     a[i] = parseInt(a[i])*dpi + 'px';
                 }
-                for(var j=0;j<b.length;j++){
+                for(let j=0;j<b.length;j++){
                     t +=b[j];
                     if(j<a.length){
                         t +=a[j];
@@ -308,7 +330,7 @@
         this.drawLine(this.paint,x1 * dpi,y1 * dpi,x2 * dpi,y2 * dpi,color,width * dpi,lineCap)
     };
     
-    var _global = (function(){ return this || (0, eval)('this'); }());
+    let _global = (function(){ return this || (0, eval)('this'); }());
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ScratchCard;
     } else if (typeof define === "function" && define.amd) {

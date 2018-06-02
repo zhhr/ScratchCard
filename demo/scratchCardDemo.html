@@ -27,7 +27,7 @@
             height: 100%;
         }
 
-        .boxin {
+        .box-content {
             font: 100px/200px sans-serif;
             text-align: center;
             color: #fff;
@@ -41,9 +41,9 @@
 </head>
 <body>
 <h3>刮刮卡demo</h3>
-<p>注意：由于canvas安全限制，该demo不可以file://协议打开，需用http://或者https://协议打开，否则会导致功能异常。</p>
+<p>注意：由于canvas安全限制，该demo不可以file://协议打开，需用http://或者https://协议打开，否则会导致功能异常（无法获知刮开进度，无法触发刮奖结束）。</p>
 <div class="box">
-    <div class="boxin"></div>
+    <div class="box-content"></div>
     <canvas id="canvas" width="600" height="200"></canvas>
 </div>
 
@@ -66,8 +66,8 @@
 
             //业务逻辑
             console.log('去取数据。。。');
-            var num = Math.floor(Math.random() * 10);
-            var txt = '';
+            let num = Math.floor(Math.random() * 10);
+            let txt = '';
             if (num === 0) {
                 txt = '一等奖';
             } else if (num <= 2) {
@@ -77,9 +77,9 @@
             } else {
                 txt = '谢谢';
             }
-            document.querySelector('.boxin').innerHTML = txt;
+            document.querySelector('.box-content').innerHTML = txt;
 
-            var _this = scratchCard;
+            let _this = scratchCard;
 
             // 画线
             _this.paintLine(0, 0, _this.canvasWidth / 2, _this.canvasHeight / 2, 'red', 1, null, 1);
@@ -113,14 +113,14 @@
         endBack: function () {
             console.log('刮奖完成。。。')
         }, //完全刮开后的回调
-        //endHide: true,	//画完后 canvas 是否会 display:none; 默认true
+        //endHide: true,    //画完后 canvas 是否会 display:none; 默认true
 
     });
 
 
-    var pauseBtn = document.getElementById('pauseBtn');
-    var continueBtn = document.getElementById('continueBtn');
-    var resetBtn = document.getElementById('resetBtn');
+    let pauseBtn = document.getElementById('pauseBtn');
+    let continueBtn = document.getElementById('continueBtn');
+    let resetBtn = document.getElementById('resetBtn');
 
 
     pauseBtn.onclick = function (ev) {
