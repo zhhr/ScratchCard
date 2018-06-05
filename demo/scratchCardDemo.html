@@ -42,6 +42,7 @@
 <body>
 <h3>刮刮卡demo</h3>
 <p>注意：由于canvas安全限制，该demo不可以file://协议打开，需用http://或者https://协议打开，否则会导致功能异常（无法获知刮开进度，无法触发刮奖结束）。</p>
+<p>由于canvas安全策略导致无法使用跨域图片。所以目前遮罩暂不支持使用跨域图片，可以将图片自行转为base64来代替图片url。</p>
 <div class="box">
     <div class="box-content"></div>
     <canvas id="canvas" width="600" height="200"></canvas>

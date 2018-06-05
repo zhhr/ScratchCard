@@ -18,7 +18,9 @@
         this.canvasWidth = undefined;
         this.canvasHeight = undefined;
         if(this.query && typeof this.query==='string') {
-            this.init();
+            setTimeout(()=>{
+                this.init();
+            });
         }
     }
     ScratchCard.prototype.init = function(){
