@@ -11,7 +11,7 @@
         this.openPercent = conf.openPercent;
         this.progressBack = conf.progressBack;
         this.endBack = conf.endBack;
-        this.endHide = conf.endHide === false ? false : true;
+        this.endHide = conf.endHide !== false;
         this.dpi = conf.dpi || window.devicePixelRatio || 1;
         this.canvas = null;
         this.paint = null;
