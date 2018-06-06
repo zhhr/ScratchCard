@@ -2,7 +2,7 @@
  * Created by zhhr on 2018/5/23.
  */
  ;(function(undefined){
-    "use strict"
+    "use strict";
     function ScratchCard(conf){
         this.query = conf.id;
         this.maskColor = conf.maskColor;
