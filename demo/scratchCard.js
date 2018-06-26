@@ -175,6 +175,7 @@
         let x = (l2 - l1) * this.scaleX;
         let y = (t2 - t1) * this.scaleY;
         let r = touch.radiusX * this.scaleX;
+        r = r>=20 ? r : 20;
         this.clearArc(this.paint,x,y,r);
     };
     ScratchCard.prototype.mouseClear = function (ev){
